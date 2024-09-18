@@ -1,0 +1,33 @@
+import keyboard
+import tkinter as tk
+
+count = 0
+key = "insert"
+
+# function to update label
+def update_label():
+    label.config(text=f"count: {count}")
+    label.pack(pady = 20)
+    
+
+# function to add to count upon key
+def on_key_press(event):
+    global count
+    count += 1
+    update_label()
+
+# gui window
+root = tk.Tk()
+root.title("counter")
+root.geometry("250x100")
+
+# initial gui label, states key
+label = tk.Label(root, text = f"press {key} to begin", font=("Comic Sans MS", 14))
+label.pack(pady = 20)
+
+
+# keypress
+keyboard.on_press_key(key, on_key_press)
+
+# gui main loop
+root.mainloop()
