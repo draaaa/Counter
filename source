@@ -1,33 +1,76 @@
+#import modules
 import keyboard
 import tkinter as tk
 
-count = 0
-key = "insert"
+#define variables
+count, etime, avg, sec, mnt, hr = 0, 0, 0, 0, 0, 0
+timer_running = True  # flag to control timer
+timer_started = False  # flag to prevent premature label updates
+
+# hotkeys that are changable based on the user's preference
+startkey = "insert"
+endkey = "escape"
 
 # function to update label
 def update_label():
-    label.config(text=f"count: {count}")
-    label.pack(pady = 20)
+    label.config(text=f"count: {count}\nTime: {hr:02}:{mnt:02}:{sec:02}")
+    label.pack(pady=20)
+
+# function to create the end label
+def update_endlabel():
+    global avg, count, etime, sec, mnt, hr
+    etime = hr * 60 + mnt + sec / 60  # calculates elapsed time
+    if etime > 0:
+        avg = count / etime
+    else:
+        avg = 0
+    label.config(text=f"count: {count}\navg: {avg:.2f} per min")
+
+# function to structure timer
+def update_time():
+    global sec, mnt, hr
+    if timer_running and timer_started:  # only update recorded time if timer is running
+        sec += 1
+        if sec == 60:
+            sec = 0
+            mnt += 1
+        if mnt == 60:
+            mnt = 0
+            hr += 1
+        # update label as time passes
+        label.config(text=f"count: {count}\nTime: {hr:02}:{mnt:02}:{sec:02}")
+    # function called again after 1000 ms
+    root.after(1000, update_time)
     
 
 # function to add to count upon key
-def on_key_press(event):
-    global count
+def on_start_press(event):
+    global count, timer_started
     count += 1
+    timer_started = True  # timer starts when startkey is pressed
     update_label()
+
+# function to end time interval and show endlabel
+def on_end_press(event):
+    global timer_running
+    timer_running = False  # timer stops when endkey is pressed
+    update_endlabel()
 
 # gui window
 root = tk.Tk()
 root.title("counter")
-root.geometry("250x100")
+root.geometry("350x125")
 
 # initial gui label, states key
-label = tk.Label(root, text = f"press {key} to begin", font=("Comic Sans MS", 14))
+label = tk.Label(root, text = f"press {startkey} to begin\npress {endkey} to end interval", font=("Comic Sans MS", 14))
 label.pack(pady = 20)
 
+# timer
+root.after(1000, update_time)
 
-# keypress
-keyboard.on_press_key(key, on_key_press)
+# keypress handling
+keyboard.on_press_key(startkey, on_start_press)
+keyboard.on_press_key(endkey, on_end_press)
 
 # gui main loop
 root.mainloop()
