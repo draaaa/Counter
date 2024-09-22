@@ -7,7 +7,7 @@ count, etime, avg, sec, mnt, hr = 0, 0, 0, 0, 0, 0
 timer_running = True  # flag to control timer
 timer_started = False  # flag to prevent premature label updates
 
-# hotkeys that are changable based on the user's preference
+# hotkeys that are changeable based on the user's preference
 startkey = "insert"
 endkey = "escape"
 
