@@ -24,7 +24,7 @@ def update_endlabel():
         avg = count / etime
     else:
         avg = 0
-    label.config(text=f"count: {count}\navg: {avg:.2f} per min")
+    label.config(text=f"count: {count}\nelapsed time: {hr:02}:{mnt:02}:{sec:02}\navg: {avg:.2f} per min")
 
 # function to structure timer
 def update_time():
@@ -59,7 +59,7 @@ def on_end_press(event):
 # gui window
 root = tk.Tk()
 root.title("counter")
-root.geometry("350x125")
+root.geometry("350x135")
 
 # initial gui label, states key
 label = tk.Label(root, text = f"press {startkey} to begin\npress {endkey} to end interval", font=("Comic Sans MS", 14))
