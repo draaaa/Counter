@@ -1,8 +1,11 @@
-#import modules
+# import modules
 import keyboard
 import tkinter as tk
+import tkinter.messagebox
+import os
+import time
 
-#define variables
+# define variables
 count, etime, avg, sec, mnt, hr = 0, 0, 0, 0, 0, 0
 timer_running = True  # flag to control timer
 timer_started = False  # flag to prevent premature label updates
@@ -11,10 +14,22 @@ timer_started = False  # flag to prevent premature label updates
 startkey = "insert"
 endkey = "escape"
 
+
+# function to save data - completely optional
+def save_data():
+    global count
+    data_file = time.strftime('%Y-%m-%d %H_%M_%S') + '.txt'
+    folder = os.path.join(os.path.expanduser('~'), 'counter_data')
+    with open(os.path.join(folder, data_file), 'a') as file:
+        file.write(f"{count} presses\ntotal time elapsed: {hr:02}:{mnt:02}:{sec:02}\naverage units per minute: {avg}")
+    tkinter.messagebox.showinfo(f"counter", f"{data_file} saved successfully")
+
+
 # function to update label
 def update_label():
     label.config(text=f"count: {count}\nTime: {hr:02}:{mnt:02}:{sec:02}")
     label.pack(pady=20)
+
 
 # function to create the end label
 def update_endlabel():
@@ -24,7 +39,20 @@ def update_endlabel():
         avg = count / etime
     else:
         avg = 0
-    label.config(text=f"count: {count}\nelapsed time: {hr:02}:{mnt:02}:{sec:02}\navg: {avg:.2f} per min")
+    label.config(
+        text=f"{count} presses\ntotal time elapsed: {hr:02}:{mnt:02}:{sec:02}\naverage units per minute: {avg}")
+    tkinter.messagebox.askokcancel(title=f"counter", message=f"Wanna save the results?")
+    if True:
+        folder = "counter_data"
+        user_folder = os.path.expanduser('~')
+        folder = os.path.join(user_folder, 'counter_data')
+        if not os.path.isdir(folder):
+            tkinter.messagebox.askokcancel(title=f"counter",
+                                           message=f"Seems like this is your first time saving data. Clicking 'OK' will create a folder with the address {folder}.\n !!!ONLY .TXT FILES WILL BE CREATED!!!")
+            if True:
+                os.makedirs(folder)
+        save_data()
+
 
 # function to structure timer
 def update_time():
@@ -41,7 +69,7 @@ def update_time():
         label.config(text=f"count: {count}\nTime: {hr:02}:{mnt:02}:{sec:02}")
     # function called again after 1000 ms
     root.after(1000, update_time)
-    
+
 
 # function to add to count upon key
 def on_start_press(event):
@@ -50,11 +78,13 @@ def on_start_press(event):
     timer_started = True  # timer starts when startkey is pressed
     update_label()
 
+
 # function to end time interval and show endlabel
 def on_end_press(event):
     global timer_running
     timer_running = False  # timer stops when endkey is pressed
     update_endlabel()
+
 
 # gui window
 root = tk.Tk()
@@ -62,8 +92,8 @@ root.title("counter")
 root.geometry("350x135")
 
 # initial gui label, states key
-label = tk.Label(root, text = f"press {startkey} to begin\npress {endkey} to end interval", font=("Comic Sans MS", 14))
-label.pack(pady = 20)
+label = tk.Label(root, text=f"press {startkey} to begin\npress {endkey} to end interval", font=("Comic Sans MS", 14))
+label.pack(pady=20)
 
 # timer
 root.after(1000, update_time)
