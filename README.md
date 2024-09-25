@@ -1,4 +1,4 @@
-**If you are having issues, please consult the wiki first before coming to me.**
+**If you are having issues, please consult the [wiki](https://github.com/draaaa/counter/wiki) first before coming to me.**
 
 -----------------------------------------------------------------------------------------
 
