@@ -1,3 +1,16 @@
+#This code, upon execution, will create 3 folders - counter_main, counter_main/data, counter_main/config, and counter_main/config/config.txt
+#(The directory should look like this - C:\Users\Username\counter_main)
+#It can also save the results of your recorded intervals, also in .txt format.
+
+#If you do not feel comfortable with this, you are free to use previous versions of the code. The most recent version without file saving can be found via the link below
+#https://raw.githubusercontent.com/draaaa/counter/801492f8cfbe1cc4e572335a3a46d806950040c5/source
+#Simply paste the raw code into a code editor, and execute.
+
+#Lastly, please ensure that you have the keyboard module installed. Unlike other modules that come with python, you must download the keyboard module manually.
+#The link below is a relatively easy guide on how to install the keyboard module.
+#https://github.com/draaaa/counter/wiki/Installing-the-Keyboard-Module
+
+
 # import modules
 import keyboard
 import tkinter as tk
@@ -11,23 +24,44 @@ timer_running = True  # flag to control timer
 timer_started = False  # flag to prevent premature label updates
 
 # hotkeys that are changeable based on the user's preference
-startkey = "insert"
-endkey = "escape"
+startkey = None
+endkey = None
+try:
+    file_path = os.path.expanduser('~/counter_main/config/config.txt')
+    with open(file_path, 'r') as f:
+        cfg_contents = f.readlines()
+        for line in cfg_contents:
+            if line.startswith('startkey'):
+                startkey = line.split('=')[1].strip()
+            if line.startswith('endkey'):
+                endkey = line.split('=')[1].strip()
+except FileNotFoundError:
+    tkinter.messagebox.showinfo(
+        'counter',
+        'Config file not found - re-execute code')
+    pass
 
 
-# function to save data - completely optional
+# function to save data
 def save_data():
     global count
     data_file = time.strftime('%Y-%m-%d %H_%M_%S') + '.txt'
-    folder = os.path.join(os.path.expanduser('~'), 'counter_data')
-    with open(os.path.join(folder, data_file), 'a') as file:
-        file.write(f"{count} presses\ntotal time elapsed: {hr:02}:{mnt:02}:{sec:02}\naverage units per minute: {avg}")
-    tkinter.messagebox.showinfo(f"counter", f"{data_file} saved successfully")
+    data = os.path.join(os.path.expanduser('~'), 'counter_main', 'data')
+    with open(os.path.join(data, data_file), 'a') as file:
+        file.write(
+            f"{count} presses\ntotal time elapsed: {hr:02}:{mnt:02}:{sec:02}\naverage units per minute: {avg}"
+        )
+    tkinter.messagebox.showinfo(
+        f"counter",
+        f"{data_file} saved successfully"
+    )
 
 
 # function to update label
 def update_label():
-    label.config(text=f"count: {count}\nTime: {hr:02}:{mnt:02}:{sec:02}")
+    (label.config(
+        text=f"count: {count}\nTime: {hr:02}:{mnt:02}:{sec:02}"
+    ))
     label.pack(pady=20)
 
 
@@ -40,18 +74,14 @@ def update_endlabel():
     else:
         avg = 0
     label.config(
-        text=f"{count} presses\ntotal time elapsed: {hr:02}:{mnt:02}:{sec:02}\naverage units per minute: {avg}")
-    tkinter.messagebox.askokcancel(title=f"counter", message=f"Wanna save the results?")
-    if True:
-        folder = "counter_data"
-        user_folder = os.path.expanduser('~')
-        folder = os.path.join(user_folder, 'counter_data')
-        if not os.path.isdir(folder):
-            tkinter.messagebox.askokcancel(title=f"counter",
-                                           message=f"Seems like this is your first time saving data. Clicking 'OK' will create a folder with the address {folder}.\n !!!ONLY .TXT FILES WILL BE CREATED!!!")
-            if True:
-                os.makedirs(folder)
+        text=f"{count} presses\ntotal time elapsed: {hr:02}:{mnt:02}:{sec:02}\naverage units per minute: {avg}"
+    )
+    save_prompt = tkinter.messagebox.askyesno(title=f"counter",
+                                              message=f"Wanna save the results?")
+    if save_prompt:
         save_data()
+    else:
+        pass
 
 
 # function to structure timer
@@ -66,9 +96,11 @@ def update_time():
             mnt = 0
             hr += 1
         # update label as time passes
-        label.config(text=f"count: {count}\nTime: {hr:02}:{mnt:02}:{sec:02}")
+        label.config(
+            text=f"count: {count}\nTime: {hr:02}:{mnt:02}:{sec:02}")
     # function called again after 1000 ms
-    root.after(1000, update_time)
+    root.after(1000,
+               update_time)
 
 
 # function to add to count upon key
@@ -86,21 +118,39 @@ def on_end_press(event):
     update_endlabel()
 
 
-# gui window
+# ui window
 root = tk.Tk()
 root.title("counter")
-root.geometry("350x135")
+root.geometry("350x135")  # ui resolution
 
-# initial gui label, states key
-label = tk.Label(root, text=f"press {startkey} to begin\npress {endkey} to end interval", font=("Comic Sans MS", 14))
+# initial ui label, states key, creates folders
+label = tk.Label(root,
+                 text=f"press {startkey} to begin\npress {endkey} to end interval",
+                 font=("Comic Sans MS", 14))  # creates beginning ui label
 label.pack(pady=20)
+user_directory = os.path.expanduser('~')
+main_folder = os.path.join(user_directory, 'counter_main')
+cfg_folder = os.path.join(main_folder, 'config')
+data_folder = os.path.join(main_folder, 'data')
+if not os.path.isdir(main_folder):
+    os.makedirs(main_folder)  # creates main folder
+    os.makedirs(cfg_folder)  # creates config folder
+    os.makedirs(data_folder)  # creates data folder
+    data_file = 'config.txt'  # creates config
+    data = os.path.join(os.path.expanduser('~'), 'counter_main', 'config')
+    with open(os.path.join(data, data_file), 'a') as file:
+        file.write(
+            f"startkey = insert\nendkey = escape"
+            # creates the default config, modifiable through counter_main/config/config.txt
+        )
 
 # timer
-root.after(1000, update_time)
+root.after(1000,
+           update_time)  # timer that begins upon startkey, shows in active label
 
 # keypress handling
 keyboard.on_press_key(startkey, on_start_press)
 keyboard.on_press_key(endkey, on_end_press)
 
-# gui main loop
+# ui main loop
 root.mainloop()
