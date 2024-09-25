@@ -1,5 +1,7 @@
 **If you are having issues, please consult the wiki first before coming to me.**
 
+-----------------------------------------------------------------------------------------
+
 a stupid class joke turned into a personal project for myself in pursuit of learning more about python
 in particular, the os module and the integrated ui, tkinter
 
