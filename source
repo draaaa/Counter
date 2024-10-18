@@ -1,4 +1,4 @@
-#This code, upon execution, will create 3 folders - counter_main, counter_main/data, counter_main/config, and counter_main/config/config.txt
+#This code, upon execution, will create 3 folders/files - counter_main, counter_main/data, counter_main/config, and counter_main/config/config.txt
 #(The directory should look like this - C:\Users\Username\counter_main)
 #It can also save the results of your recorded intervals, also in .txt format.
 
