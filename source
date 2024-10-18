@@ -1,14 +1,17 @@
-#This code, upon execution, will create 3 folders/files - counter_main, counter_main/data, counter_main/config, and counter_main/config/config.txt
-#(The directory should look like this - C:\Users\Username\counter_main)
-#It can also save the results of your recorded intervals, also in .txt format.
+# This code, upon execution, will create 3 folders/files - counter_main, counter_main/data, counter_main/config, and counter_main/config/config.txt
+# (The directory should look like this - C:\Users\Username\counter_main)
+# It can also save the results of your recorded intervals, also in .txt format.
+# Also note that executing this code for the first time will throw an error. I might add a workaround so you aren't thrown an unnecessary error later.  
+# Should work without error after you have executed it for the second time. If not, post an issue on the repo or something.
 
-#If you do not feel comfortable with this, you are free to use previous versions of the code. The most recent version without file saving can be found via the link below
-#https://raw.githubusercontent.com/draaaa/counter/801492f8cfbe1cc4e572335a3a46d806950040c5/source
-#Simply paste the raw code into a code editor, and execute.
+# If you do not feel comfortable with this, you are free to use previous versions of the code. The most recent version without file saving can be found via the link below
+# https://raw.githubusercontent.com/draaaa/counter/801492f8cfbe1cc4e572335a3a46d806950040c5/source
+# Simply paste the raw code into your preferred IDE/Editor, save, and execute as you normally would.
 
-#Lastly, please ensure that you have the keyboard module installed. Unlike other modules that come with python, you must download the keyboard module manually.
-#The link below is a relatively easy guide on how to install the keyboard module.
-#https://github.com/draaaa/counter/wiki/Installing-the-Keyboard-Module
+# Lastly, please ensure that you have the keyboard module installed. Unlike other modules that come with python, you must download the keyboard module manually.
+# The link below is a relatively easy guide on how to install the keyboard module that I had created.
+# https://github.com/draaaa/counter/wiki/Installing-the-Keyboard-Module
+# If you need further clarification, your favorite AI/LLM will do you wonders.
 
 
 # import modules
